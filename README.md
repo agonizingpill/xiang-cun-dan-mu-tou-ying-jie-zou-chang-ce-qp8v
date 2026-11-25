@@ -54,6 +54,9 @@ Compose 运行 Nginx、Python FastAPI、独立 Redis 消费进程、SQL 数据�
 | 试投节奏轨迹 | `/cue_tracks` /cue_tracks/record-track，/cue_tracks/lock-track | `frontend/src/pages/cue_tracks.js` |
 | 对场节奏簇 | `/cue_clusters` /cue_clusters/compare-cues，/cue_clusters/save-cluster | `frontend/src/pages/cue_clusters.js` |
 | 交场分路回单 | `/cue_routing` /cue_routing/share-cue，/cue_routing/record-separate | `frontend/src/pages/cue_routing.js` |
+| 乱序实播段补报 | `/play_segments` /play_segments/report-segment，`/segment_conflicts`，`/segment_reminders` | `frontend/src/pages/cue_routing.js` |
+
+乱序实播记录按交场回单与段号补报带编号拍点（`beat` 为签认样板拍号、`time` 为实播秒）。缺段先挂起，前序段连上后随到随判；每段从上段确认的样板拍点往后接。判定对齐节奏簇样板（`cue_clusters.representative` 轨迹）：各拍偏差在容差内为「吻合」，整体平移为「整体延迟」（记录中位偏移 `shift`），残差极差发散为「逐拍走偏」（记录极差 `drift`）。同段并发同稿只采纳一份，异稿写入 `segment_conflicts` 留作冲突；非吻合段在 `segment_reminders` 留存样板与实播两组拍点，已发提醒不重复。纯领域逻辑在 `backend/domain/play_segment_logic.py`，离线核验脚本 `python3 -I scripts/test_play_segment_logic.py`。
 
 SQL 实体与约束在 `backend/domain` 下维护。前端使用原生 ES modules。核心算子为 DTW + 凝聚层次聚类。以绝对时间差为局部代价，DTW 归一化后作为层次聚类的距离矩阵，簇内总距离最短的轨迹为代表。
 

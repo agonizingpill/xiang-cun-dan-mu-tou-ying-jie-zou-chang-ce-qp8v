@@ -49,6 +49,9 @@ th { color:var(--soft); background:var(--tint); font-weight:650 }
 .record dd { margin:0; overflow-wrap:anywhere }
 .actions { display:grid; gap:1rem }
 .work.stack .actions { grid-template-columns:repeat(auto-fit,minmax(min(21rem,100%),1fr)) }
+.segment-board { display:grid; gap:clamp(1rem,2.5vw,2.5rem); margin-top:clamp(1.2rem,3vw,2.5rem) }
+.board-grid { display:grid; grid-template-columns:minmax(0,1.35fr) minmax(0,1fr); gap:clamp(1rem,2.5vw,2.5rem); align-items:start }
+@media(max-width:970px) { .board-grid { grid-template-columns:1fr } }
 .fields { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(11rem,100%),1fr)); gap:.65rem; margin:.8rem 0 }
 label { display:block; min-width:0 }
 label span { display:block; color:var(--soft); font-size:.875em }
